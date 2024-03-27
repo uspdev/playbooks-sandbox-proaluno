@@ -1,0 +1,55 @@
+---
+- name: configure a client for Pro-Aluno Labs
+  become: yes
+  hosts: clientedeb
+
+  #### global vars
+  vars:
+    sssd_ad_realm: "smbdomain.local.br"
+
+  #### tasks
+  tasks:
+
+    ### Na producao nao e necessario pois isso sera configurado via DHCP 
+    - name: Configura resolv.conf para consultar DNSs no próprio samba
+      include_role:
+        name: blackstar257.resolv
+      vars:
+        resolv_conf_nameservers:
+          - 192.168.40.2
+        resolv_conf_search_domains:
+          - "{{ sssd_ad_realm }}"
+
+    - name: configura /etc/hosts e /etc/hostnane
+      include_role:
+        name: Stouts.hostname
+      vars:
+        hostname_hostname: "{{ inventory_hostname }}.{{ sssd_ad_realm }}"
+
+    - name: Corrige o timezone para America/Sao_Paulo
+      include_role:
+        name: adriagalin.timezone
+      vars:
+        ag_timezone: 'America/Sao_Paulo'
+
+    - name: Altera o locale para pt_BR.UTF-8
+      include_role:
+        name: infOpen.locales
+      vars:
+        locales_to_configure:
+          - name: 'en_US.UTF-8'
+            modifier: 'en_US.UTF-8'
+          - name: 'pt_BR.UTF-8'
+            modifier: 'UTF-8'
+        locales_defaults:
+          LANG: 'pt_BR.UTF-8'
+          LC_CTYPE: 'pt_BR.UTF-8'
+          LANGUAGE: 'pt_BR.UTF-8'
+
+    - name: Configura cliente sssd
+      include_role:
+        name: uspdev.sssd_ad
+      vars:
+        sssd_ad_realm: "smbdomain.local.br"
+        sssd_ad_admin_password: "proalunoSenh@1"
+        sssd_ad_admin_user: "Administrator"

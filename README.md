@@ -7,5 +7,13 @@ Instalação do plugin do libvirt no ansible:
 
     vagrant plugin install vagrant-libvirt
 
+Instalando roles:
 
+    cd ansible-proaluno
+    ansible-galaxy install -r requirements.yml --force
+
+Subindo sambadc:
+
+    vagrant up sambadc
+    ansible-playbook playbooks/sambadc.yml
     

@@ -1,0 +1,7 @@
+.vagrant/
+*.retry
+*.swp
+*~
+roles/*
+libraries/*
+

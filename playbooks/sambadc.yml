@@ -1,0 +1,73 @@
+---
+- name: sambadc server to store user objects
+  become: yes
+  hosts: sambadc
+
+  #### global vars
+  vars:
+    sambadc_realm: "smbdomain.local.br"
+
+  #### tasks
+  tasks:
+
+    - name: configura /etc/hosts e /etc/hostnane
+      include_role:
+        name: Stouts.hostname
+      vars:
+        hostname_hostname: "{{ inventory_hostname }}.{{sambadc_realm}}"
+
+    - name: Corrige o timezone para America/Sao_Paulo
+      include_role:
+        name: adriagalin.timezone
+      vars:
+        ag_timezone: 'America/Sao_Paulo'
+
+    - name: Altera o locale para pt_BR.UTF-8
+      include_role:
+        name: infOpen.locales
+      vars:
+        locales_to_configure:
+          - name: 'en_US.UTF-8'
+            modifier: 'en_US.UTF-8'
+          - name: 'pt_BR.UTF-8'
+            modifier: 'UTF-8'
+        locales_defaults:
+          LANG: 'pt_BR.UTF-8'
+          LC_CTYPE: 'pt_BR.UTF-8'
+          LANGUAGE: 'pt_BR.UTF-8'
+
+    - name: Configura ntp
+      include_role:
+        name: geerlingguy.ntp
+      vars:
+        ntp_manage_config: true
+        ntp_timezone: 'America/Sao_Paulo'
+        ntp_servers:
+          - 'a.st1.ntp.br'
+          - 'b.st1.ntp.br'
+        ntp_restrict:
+          - "127.0.0.1"
+          - "::1"
+          - "10.0.0.0 mask 255.0.0.0 nomodify notrap"
+          - "172.19.0.0 mask 255.255.0.0 nomodify notrap"
+          - "143.107.0.0 mask 255.255.0.0 nomodify notrap"
+
+    - name: Configura samba como um Domain Controller
+      include_role:
+        name: fflch.sambadc
+      vars:
+        sambadc_type: "new"
+        sambadc_admin_password: "proalunoSenh@1"
+        sambadc_netbios        : "{{ inventory_hostname }}"
+        sambadc_dns_forwarder: 8.8.8.8
+        sambadc_use_backports: false
+        sambadc_load_printers_from_csv: false
+
+    - name: Configura resolv.conf para consultar DNSs no próprio samba
+      include_role:
+        name: blackstar257.resolv
+      vars:
+        resolv_conf_nameservers:
+          - 192.168.40.2
+        resolv_conf_search_domains:
+          - "{{ sambadc_realm }}"

@@ -1,6 +1,7 @@
 [vagrant]
 sambadc ansible_host="192.168.40.2"
 clientedeb ansible_host="192.168.40.3"
+cups ansible_host="192.168.40.4"
 
 [vagrant:vars]
 ansible_user="vagrant"

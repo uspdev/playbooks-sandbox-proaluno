@@ -32,4 +32,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
+  config.vm.define "cups" do |host|
+    host.vm.hostname = "cups"
+    host.vm.box = "debian/bookworm64"
+    host.vm.network :private_network,
+      :ip => "192.168.40.4",
+      :libvirt__network_name => "uspdev",
+      :libvirt__forward_mode => "nat"
+    host.vm.provider :libvirt do |v|
+      v.memory = 1024
+      v.cpus = 1
+    end
+  end
 end

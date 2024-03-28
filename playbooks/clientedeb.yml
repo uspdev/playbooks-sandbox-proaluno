@@ -53,3 +53,19 @@
         sssd_ad_realm: "smbdomain.local.br"
         sssd_ad_admin_password: "proalunoSenh@1"
         sssd_ad_admin_user: "Administrator"
+
+    - name: pam mkhomedir
+      lineinfile:
+        path: /etc/pam.d/common-session
+        line: session optional pam_mkhomedir.so
+
+    - name: XFCE
+      apt:
+        name: task-xfce-desktop
+        state: present
+
+    # TODO: trocar para handler
+    - name: lightdm
+      service:
+        name: lightdm
+        state: restarted

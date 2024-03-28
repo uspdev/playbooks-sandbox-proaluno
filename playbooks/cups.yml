@@ -3,5 +3,13 @@
   hosts: cups
   become: yes
 
+  tasks:
+
+    # usado para configurar o sistema impressoras
+    - name: troca senha do root para alfafa
+      user:
+        name: root
+        password: $y$j9T$.O7EedOruMhN/Jve9kjJO1$lTQOdbpgu7QiqF4RZeaFpY.K9/Wr1G4BR.tklJZRsH2
+
   roles:
     - role: cups_server

@@ -39,3 +39,23 @@
 
     vagrant up cups
     ansible-playbook playbooks/cups.yml
+
+### Adicionando impressora:
+
+    vagrant ssh cups
+    hpsetup -i ip.da.impressora
+
+### Configurando o impressoras:
+```bash
+# 1. mariadb (supondo IP 172.17.0.2. confirme)
+docker run --rm --name mariadb --env MARIADB_DATABASE=impressoras --env MARIADB_ROOT_PASSWORD=alfafa mariadb
+# 2. senhaunica-faker (172.17.0.3)
+docker run --rm --name faker --env APP_URL=http://172.17.0.3 uspdev/senhaunica-faker
+# 3. impressoras (172.17.0.4)
+# configurar o .env considerando os serviços cups, mariadb e senhaunica-faker
+docker run --rm --name impressoras --env-file=.env uspdev/impressoras
+# 3.1 pode ser necessário criar o APP_KEY
+docker exec -it impressoras php artisan key:generate --show
+# 4. migration
+docker exec -it impressoras php artisan migrate
+```

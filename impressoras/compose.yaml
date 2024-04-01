@@ -1,0 +1,42 @@
+services:
+    mariadb:
+        image: mariadb
+        environment:
+            - MARIADB_DATABASE=impressoras
+            - MARIADB_ROOT_PASSWORD=alfafa
+        ports:
+            - "3306:3306"
+
+    # ainda precisa rodar docker build no git
+    faker:
+        image: faker
+        environment:
+            - APP_URL=http://192.168.40.5:8001 
+        ports:
+            - "8001:80"
+
+    # ainda precisa rodar docker build no git
+    impressoras:
+        image: impressoras
+        environment:
+            - APP_KEY="base64:GxYhpi/9ys3LHRkXI7+kdf6QuOpt5zmutON2Z2//CgI="
+            - APP_URL="http://192.168.40.5:8000"
+            - DB_HOST=192.168.40.5
+            - DB_DATABASE=impressoras
+            - DB_PASSWORD=alfafa
+            - USAR_REPLICADO=true
+            - REPLICADO_HOST=
+            - REPLICADO_PORT=
+            - REPLICADO_DATABASE=
+            - REPLICADO_USERNAME=
+            - REPLICADO_PASSWORD=
+            - REPLICADO_CODUNDCLG=
+            - USP_THEME_SKIN=usp
+            - SENHAUNICA_DEV="http://192.168.40.5:8001/wsusuario/oauth"
+            - SENHAUNICA_ADMINS=3141592
+            - CUPS_SERVER_IP=192.168.40.4
+            - CUPS_SERVER_PASSWORD=alfafa
+            - REPLICADO_MONITORES=false
+        env_file: env.example
+        ports:
+            - "8000:80"

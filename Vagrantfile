@@ -44,4 +44,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.cpus = 1
     end
   end
+
+  config.vm.define "docker" do |host|
+    host.vm.hostname = "docker"
+    host.vm.box = "debian/bookworm64"
+    host.vm.network :private_network,
+      :ip => "192.168.40.5",
+      :libvirt__network_name => "uspdev",
+      :libvirt__forward_mode => "nat"
+    host.vm.provider :libvirt do |v|
+      v.memory = 4096
+      v.cpus = 2
+    end
+  end
+
 end

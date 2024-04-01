@@ -36,6 +36,7 @@
     sudo virt-viewer
 
 ### Subindo cups:
+Copiar o role cups_server de https://github.com/wgnann/ansible-roles.
 
     vagrant up cups
     ansible-playbook playbooks/cups.yml
@@ -46,16 +47,38 @@
     hpsetup -i ip.da.impressora
 
 ### Configurando o impressoras:
+Faremos a instalação do impressoras usando uma instância com docker.
+
+    vagrant up docker
+    vagrant ssh docker
+
+Dentro da instância:
 ```bash
-# 1. mariadb (supondo IP 172.17.0.2. confirme)
-docker run --rm --name mariadb --env MARIADB_DATABASE=impressoras --env MARIADB_ROOT_PASSWORD=alfafa mariadb
-# 2. senhaunica-faker (172.17.0.3)
-docker run --rm --name faker --env APP_URL=http://172.17.0.3 uspdev/senhaunica-faker
-# 3. impressoras (172.17.0.4)
-# configurar o .env considerando os serviços cups, mariadb e senhaunica-faker
-docker run --rm --name impressoras --env-file=.env uspdev/impressoras
-# 3.1 pode ser necessário criar o APP_KEY
-docker exec -it impressoras php artisan key:generate --show
-# 4. migration
-docker exec -it impressoras php artisan migrate
+sudo apt install docker.io docker-compose
+sudo usermod -a -G docker vagrant
+# deslogar e logar para pegar o grupo
+
+# build do senhaunica-faker (temporário)
+git clone https://github.com/uspdev/senhaunica-faker
+cd senhaunica-faker
+cp .env.example .env
+docker build -t faker .
+
+# build do impressoras (temporário)
+git clone https://github.com/wgnann/impressoras
+cd impressoras
+docker build -t impressoras .
+
+# editar o compose.yaml
+#  - adicionar configurações do replicado
+#  - modificar o SENHAUNICA_ADMINS
+cd /vagrant/impressoras
+docker-compose up
+
+# OBS: o env.example é exatamente o mesmo do repositório do impressoras
+
+# rodar as migrations
+docker-compose exec impressoras php artisan migrate
+
+# acessar http://192.168.40.5:8000
 ```

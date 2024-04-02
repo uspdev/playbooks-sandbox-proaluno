@@ -1,0 +1,32 @@
+---
+- name: docker
+  hosts: docker
+  become: yes
+
+  tasks:
+
+    - name: instala pacotes do docker
+      apt:
+        pkg:
+          - docker.io
+          - docker-compose
+
+    - name: adiciona o vagrant ao grupo docker
+      user:
+        name: vagrant
+        groups: docker
+
+    - name: baixa imagem do mariadb
+      docker_image:
+        name: mariadb
+        source: pull
+
+    - name: baixa imagem do senhaunica-faker
+      docker_image:
+        name: uspdev/senhaunica-faker:1.0.0
+        source: pull
+
+    - name: baixa imagem do impressoras
+      docker_image:
+        name: uspdev/impressoras:2.1.0
+        source: pull

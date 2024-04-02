@@ -7,17 +7,16 @@ services:
         ports:
             - "3306:3306"
 
-    # ainda precisa rodar docker build no git
     faker:
-        image: faker
+        image: uspdev/senhaunica-faker:1.0.0
         environment:
+            - APP_KEY=base64:hFCIxDuhMowTmnPENgqjXXOPcoJnC777ZBkEIy25t6o=
             - APP_URL=http://192.168.40.5:8001 
         ports:
             - "8001:80"
 
-    # ainda precisa rodar docker build no git
     impressoras:
-        image: impressoras
+        image: uspdev/impressoras:2.1.0
         environment:
             - APP_KEY="base64:GxYhpi/9ys3LHRkXI7+kdf6QuOpt5zmutON2Z2//CgI="
             - APP_URL="http://192.168.40.5:8000"
@@ -37,6 +36,7 @@ services:
             - CUPS_SERVER_IP=192.168.40.4
             - CUPS_SERVER_PASSWORD=alfafa
             - REPLICADO_MONITORES=false
-        env_file: env.example
+        env_file:
+            - env.example
         ports:
             - "8000:80"

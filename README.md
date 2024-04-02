@@ -14,7 +14,7 @@
     cd ansible-proaluno
     ansible-galaxy install -r requirements.yml --force
 
-## Samba DC:
+## Samba DC
 
 ### Subindo Samba DC
 
@@ -26,6 +26,8 @@
     vagrant ssh sambadc
     sudo samba-tool user create rickastley
 
+## Cliente
+
 ### Subindo cliente:
 
     vagrant up clientedeb
@@ -34,6 +36,8 @@
 ### Testando cliente:
 
     sudo virt-viewer
+
+## Impressoras
 
 ### Subindo cups:
 Copiar o role cups_server de https://github.com/wgnann/ansible-roles.
@@ -49,36 +53,19 @@ Copiar o role cups_server de https://github.com/wgnann/ansible-roles.
 ### Configurando o impressoras:
 Faremos a instalação do impressoras usando uma instância com docker.
 
+Editar o `impressoras/compose.yaml`
+  - adicionar configurações do replicado
+  - modificar o `SENHAUNICA_ADMINS`
+
+Depois:
+
     vagrant up docker
+    ansible-playbook playbooks/docker.yml
     vagrant ssh docker
+    cd /vagrant/impressoras
+    docker-compose up -d
+    docker-compose exec impressoras php artisan migrate
 
-Dentro da instância:
-```bash
-sudo apt install docker.io docker-compose
-sudo usermod -a -G docker vagrant
-# deslogar e logar para pegar o grupo
+OBS: o env.example é exatamente o mesmo do repositório do impressoras
 
-# build do senhaunica-faker (temporário)
-git clone https://github.com/uspdev/senhaunica-faker
-cd senhaunica-faker
-cp .env.example .env
-docker build -t faker .
-
-# build do impressoras (temporário)
-git clone https://github.com/wgnann/impressoras
-cd impressoras
-docker build -t impressoras .
-
-# editar o compose.yaml
-#  - adicionar configurações do replicado
-#  - modificar o SENHAUNICA_ADMINS
-cd /vagrant/impressoras
-docker-compose up
-
-# OBS: o env.example é exatamente o mesmo do repositório do impressoras
-
-# rodar as migrations
-docker-compose exec impressoras php artisan migrate
-
-# acessar http://192.168.40.5:8000
-```
+Acessar http://192.168.40.5:8000

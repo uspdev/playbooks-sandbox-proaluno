@@ -5,7 +5,7 @@
 
 - name: uspdev.sssd_ad
   src: https://github.com/uspdev/ansible-role-sssd-ad.git
-  version: 1.0.2
+  version: 1.0.4
 
  #### roles comunidade ####
 - src: Stouts.hostname

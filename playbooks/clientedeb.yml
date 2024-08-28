@@ -53,6 +53,9 @@
         sssd_ad_realm: "smbdomain.local.br"
         sssd_ad_admin_password: "proalunoSenh@1"
         sssd_ad_admin_user: "Administrator"
+        sssd_ldap_id_mapping: 'False'
+        sssd_ldap_user_name_uid: True
+        sssd_enumerate: 'True'
 
     - name: pam mkhomedir
       lineinfile:

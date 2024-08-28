@@ -69,3 +69,13 @@ Depois:
 OBS: o env.example é exatamente o mesmo do repositório do impressoras
 
 Acessar http://192.168.40.5:8000
+
+## Cenário para casos com login numérico
+
+Criar um grupo chamado proaluno no domínio pandora.tux.local:
+
+    samba-tool group add proaluno --nis-domain=pandora --gid-number=6000
+
+Criar um usuário numérico 123456 com senha senha123 no grupo proaluno:
+
+    samba-tool user create 123456 senha123 --given-name=Maria --uid=a123456 --uid-number=123456 --gid-number=6000 --unix-home=/home/a123456 --login-shell=/bin/bash

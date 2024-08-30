@@ -24,7 +24,7 @@
       include_role:
         name: Stouts.hostname
       vars:
-        hostname_hostname: "{{ inventory_hostname }}.{{ sssd_ad_realm }}"
+        hostname_hostname: "{{ inventory_hostname }}.{{ sssd_ldap_realm }}"
 
     - name: Corrige o timezone para America/Sao_Paulo
       include_role:

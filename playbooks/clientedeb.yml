@@ -48,23 +48,15 @@
 
     - name: Configura cliente sssd
       include_role:
-        name: uspdev.sssd_ad
+        name: uspdev.sssd_ldap
       vars:
-        sssd_ad_realm: "smbdomain.local.br"
-        sssd_ad_admin_password: "proalunoSenh@1"
-        sssd_ad_admin_user: "Administrator"
-        sssd_ldap_id_mapping: 'False'
-        sssd_ldap_user_name_uid: True
-        sssd_enumerate: 'True'
-
-    - name: pam mkhomedir
-      lineinfile:
-        path: /etc/pam.d/common-session
-        line: session optional pam_mkhomedir.so
+        sssd_ldap_realm: "smbdomain.local.br"
+        sssd_ldap_admin_password: "proalunoSenh@1"
+        sssd_ldap_admin_user: "Administrator"
 
     - name: XFCE
       apt:
-        name: task-xfce-desktop
+        name: task-cinnamon-desktop
         state: present
 
     # TODO: trocar para handler

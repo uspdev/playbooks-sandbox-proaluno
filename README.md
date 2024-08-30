@@ -72,9 +72,9 @@ Acessar http://192.168.40.5:8000
 
 ## Cenário para casos com login numérico
 
-Criar um grupo chamado proaluno no domínio pandora.tux.local:
+Criar um grupo chamado linux no domínio pandora.tux.local:
 
-    samba-tool group add proaluno --nis-domain=pandora --gid-number=6000
+    samba-tool group add linux --nis-domain=smbdomain --gid-number=6000
 
 Criar um usuário numérico 123456 com senha senha123 no grupo proaluno:
 

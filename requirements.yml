@@ -7,6 +7,10 @@
   src: https://github.com/uspdev/ansible-role-sssd-ad.git
   version: 1.0.4
 
+- name: uspdev.sssd_ldap
+  src: https://github.com/uspdev/ansible-role-sssd-ldap.git
+  version: 1.0.2
+
  #### roles comunidade ####
 - src: Stouts.hostname
 - src: adriagalin.timezone

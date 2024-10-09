@@ -11,6 +11,10 @@
   src: https://github.com/uspdev/ansible-role-sssd-ldap.git
   version: 1.0.2
 
+- name: uspdev.proaluno
+  src: https://github.com/uspdev/ansible-role-proaluno.git
+  version: 1.0.8
+
  #### roles comunidade ####
 - src: Stouts.hostname
 - src: adriagalin.timezone

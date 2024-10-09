@@ -37,10 +37,20 @@
         sssd_ldap_realm: "smbdomain.local.br"
         sssd_ldap_admin_password: "proalunoSenh@1"
         sssd_ldap_admin_user: "Administrator"
+        sssd_ldap_basedn: "dc=smbdomain,dc=local,dc=br"
 
-    - name: role proaluno
+#    - name: role proaluno
+#      include_role:
+#        name: uspdev.proaluno
+
+    - name: Configura resolv.conf para consultar DNSs do sambadc
       include_role:
-        name: uspdev.proaluno
+        name: blackstar257.resolv
+      vars:
+        resolv_conf_nameservers:
+          - 192.168.40.2
+        resolv_conf_search_domains:
+          - "smbdomain.local.br"
 
     - name: Configura ntp para apontar para o SAMBA-DC
       include_role:

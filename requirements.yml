@@ -13,7 +13,7 @@
 
 - name: uspdev.proaluno
   src: https://github.com/uspdev/ansible-role-proaluno.git
-  version: 1.0.8
+  version: 1.0.9
 
  #### roles comunidade ####
 - src: Stouts.hostname

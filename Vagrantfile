@@ -8,7 +8,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "sambadc" do |host|
     host.vm.hostname = "sambadc"
-    host.vm.box = "debian/bookworm64"
+    host.vm.box = "generic/debian12"
     host.vm.network :private_network,
       :ip => "192.168.40.2",
       :libvirt__network_name => "uspdev",
@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
   config.vm.define "clientedeb" do |host|
     host.vm.hostname = "clientedeb"
-    host.vm.box = "debian/bookworm64"
+    host.vm.box = "generic/debian12"
     host.vm.network :private_network,
       :ip => "192.168.40.3",
       :libvirt__network_name => "uspdev",

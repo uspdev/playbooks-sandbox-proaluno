@@ -10,22 +10,6 @@
   #### tasks
   tasks:
 
-    ### Na producao nao e necessario pois isso sera configurado via DHCP 
-    - name: Configura resolv.conf para consultar DNSs no próprio samba
-      include_role:
-        name: blackstar257.resolv
-      vars:
-        resolv_conf_nameservers:
-          - 192.168.40.2
-        resolv_conf_search_domains:
-          - "{{ sssd_ad_realm }}"
-
-    - name: configura /etc/hosts e /etc/hostnane
-      include_role:
-        name: Stouts.hostname
-      vars:
-        hostname_hostname: "{{ inventory_hostname }}.{{ sssd_ldap_realm }}"
-
     - name: Corrige o timezone para America/Sao_Paulo
       include_role:
         name: adriagalin.timezone
@@ -54,13 +38,18 @@
         sssd_ldap_admin_password: "proalunoSenh@1"
         sssd_ldap_admin_user: "Administrator"
 
-    - name: XFCE
-      apt:
-        name: task-cinnamon-desktop
-        state: present
+    - name: role proaluno
+      include_role:
+        name: uspdev.proaluno
 
-    # TODO: trocar para handler
-    - name: lightdm
-      service:
-        name: lightdm
-        state: restarted
+    - name: Configura ntp para apontar para o SAMBA-DC
+      include_role:
+        name: geerlingguy.ntp
+      vars:
+        ntp_manage_config: true
+        ntp_timezone: 'America/Sao_Paulo'
+        ntp_servers:
+          - 'smbdomain.local.br'
+        ntp_restrict:
+          - "127.0.0.1"
+          - "::1"

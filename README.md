@@ -11,7 +11,7 @@
 
 #### Instalando roles:
 
-    cd ansible-proaluno
+    cd playbooks-sandbox-proaluno
     ansible-galaxy install -r requirements.yml --force
 
 ## Samba DC
@@ -21,14 +21,17 @@
     vagrant up sambadc
     ansible-playbook playbooks/sambadc.yml
 
-### Criando usuário
+Criar um grupo chamado linux no domínio smbdomain.local.br, para casos de login em linux que não aceitam login numérico:
 
     vagrant ssh sambadc
-    sudo samba-tool user create rickastley
+    samba-tool group add linux --nis-domain=smbdomain --gid-number=6000
 
-## Cliente
+### Criando usuário que o login será a123456 (campo uid) e senha `senha123`:
 
-### Subindo cliente:
+    vagrant ssh sambadc
+    samba-tool user create 123456 senha123 --given-name=Maria --uid=a123456 --uid-number=123456 --gid-number=6000 --unix-home=/home/a123456 --login-shell=/bin/bash
+
+### Subindo cliente (ou qualquer cliente da pasta unidades):
 
     vagrant up clientedeb
     ansible-playbook playbooks/clientedeb.yml
@@ -40,6 +43,7 @@
 ## Impressoras
 
 ### Subindo cups:
+
 Copiar o role cups_server de https://github.com/wgnann/ansible-roles.
 
     vagrant up cups
@@ -70,12 +74,4 @@ OBS: o env.example é exatamente o mesmo do repositório do impressoras
 
 Acessar http://192.168.40.5:8000
 
-## Cenário para casos com login numérico
 
-Criar um grupo chamado linux no domínio pandora.tux.local:
-
-    samba-tool group add linux --nis-domain=smbdomain --gid-number=6000
-
-Criar um usuário numérico 123456 com senha senha123 no grupo proaluno:
-
-    samba-tool user create 123456 senha123 --given-name=Maria --uid=a123456 --uid-number=123456 --gid-number=6000 --unix-home=/home/a123456 --login-shell=/bin/bash

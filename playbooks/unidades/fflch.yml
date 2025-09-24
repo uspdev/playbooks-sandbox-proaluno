@@ -41,7 +41,7 @@
 
     - name: role proaluno
       include_role:
-        name: uspdev.proaluno
+        name: fflch.proaluno
 
     - name: Configura resolv.conf para consultar DNSs do sambadc
       include_role:
